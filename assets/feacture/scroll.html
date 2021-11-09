@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Scroll Event</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+#header {
+    position: fixed;
+    width: 100vw;
+    height: 10vh;
+    background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+    text-align: center;
+    line-height: 10vh;
+    font-size: 5vw;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw;
+}
+
+#section1 {
+    background-image: linear-gradient(to top, #dbdcd7 0%, #dddcd7 24%, #e2c9cc 30%, #e7627d 46%, #b8235a 59%, #801357 71%, #3d1635 84%, #1c1a27 100%);
+}
+#section2 {
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+}
+#section3 {
+    background-image: linear-gradient(to top, #96fbc4 0%, #f9f586 100%);
+}
+#section4 {
+    background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);
+}
+#section5 {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+#section6 {
+    background-image: linear-gradient(to right, #fa709a 0%, #fee140 100%);
+}
+#section7 {
+    background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);
+}
+#section8 {
+    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+}
+
+    </style>
+</head>
+<body>
+    <header id="header">header</header>
+    <main id="main">
+        <section id="section1" class="section">section1</section>
+        <section id="section2" class="section">section2</section>
+        <section id="section3" class="section">section3</section>
+        <section id="section4" class="section">section4</section>
+        <section id="section5" class="section">section5</section>
+        <section id="section6" class="section">section6</section>
+        <section id="section7" class="section">section7</section>
+        <section id="section8" class="section">section8</section>
+    </main>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var elm = $(".section");
+            $(elm).each(function (index) {
+                // 개별적으로 Wheel 이벤트 적용
+                $(this).on("mousewheel DOMMouseScroll", function (e) {
+                    e.preventDefault();
+                    var delta = 0;
+                    if (!event) event = window.event;
+                    if (event.wheelDelta) {
+                        delta = event.wheelDelta / 120;
+                        if (window.opera) delta = -delta;
+                    } 
+                    else if (event.detail)
+                        delta = -event.detail / 3;
+                    var moveTop = $(window).scrollTop();
+                    var elmSelecter = $(elm).eq(index);
+                    // 마우스휠을 위에서 아래로
+                    if (delta < 0) {
+                        if ($(elmSelecter).next() != undefined) {
+                            try{
+                                moveTop = $(elmSelecter).next().offset().top;
+                            }catch(e){}
+                        }
+                    // 마우스휠을 아래에서 위로
+                    } else {
+                        if ($(elmSelecter).prev() != undefined) {
+                            try{
+                                moveTop = $(elmSelecter).prev().offset().top;
+                            }catch(e){}
+                        }
+                    }
+                     
+                    // 화면 이동 0.4초(400)
+                    $("html,body").stop().animate({
+                        scrollTop: moveTop + 'px'
+                    }, {
+                        duration: 400, complete: function () {
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+</html>
